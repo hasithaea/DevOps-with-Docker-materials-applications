@@ -6,8 +6,13 @@ COPY . .
 
 RUN go build
 
-EXPOSE 8080
+ENV PORT=8080
+ENV REQUEST_ORIGIN=http://localhost:5001
+
+
 
 RUN go test ./...
+
+EXPOSE 8080
 
 CMD [ "./server" ]
