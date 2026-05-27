@@ -15,7 +15,7 @@ COPY . .
 
 RUN npm install
 
-ENV REACT_APP_BACKEND_URL=http://localhost:8080
+ENV REACT_APP_BACKEND_URL=/api
 
 RUN npm run build
 
