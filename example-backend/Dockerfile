@@ -13,6 +13,10 @@ ENV REQUEST_ORIGIN=http://localhost:5001
 
 RUN go test ./...
 
+RUN useradd -m appuser
+RUN chown appuser .
+USER appuser
+
 EXPOSE 8080
 
 CMD [ "./server" ]

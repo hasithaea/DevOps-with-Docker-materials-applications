@@ -21,6 +21,9 @@ RUN npm run build
 
 RUN npm install -g serve
 
+RUN useradd -m appuser
+USER appuser
+
 EXPOSE 5001
 
 CMD [ "serve", "-s", "-l", "5001", "build" ]
