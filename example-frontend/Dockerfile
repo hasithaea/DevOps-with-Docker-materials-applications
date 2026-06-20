@@ -1,29 +1,15 @@
-FROM ubuntu
-
-
-
-WORKDIR /usr/src/app
-
-
-RUN apt-get update &&\
-    apt-get install -y curl &&\
-    curl -sL https://deb.nodesource.com/setup_16.x | bash &&\
-    apt install -y nodejs &&\
-    node -v && npm -v 
+FROM node:16-alpine AS build-stage
+    
+WORKDIR /myapp    
 
 COPY . .
+ENV REACT_APP_BACKEND_URL=http://localhost/api
 
-RUN npm install
+RUN npm install && \
+    npm run build
 
-ENV REACT_APP_BACKEND_URL=/api
+FROM nginx:1.19-alpine
 
-RUN npm run build
+COPY --from=build-stage /myapp/build /usr/share/nginx/html
 
-RUN npm install -g serve
-
-RUN useradd -m appuser
-USER appuser
-
-EXPOSE 5001
-
-CMD [ "serve", "-s", "-l", "5001", "build" ]
+EXPOSE 80
