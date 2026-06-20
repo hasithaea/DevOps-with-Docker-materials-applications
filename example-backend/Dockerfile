@@ -1,21 +1,19 @@
-FROM golang:1.16
+FROM golang:1.23-alpine AS builder
 
 WORKDIR /myapp
 
 COPY . .
 
-RUN go build
+RUN go build -o server .
 
-ENV PORT=8080
-ENV REQUEST_ORIGIN=http://localhost:5001
+FROM scratch
 
+WORKDIR /myapp
 
+COPY --from=builder /myapp/server .
 
-RUN go test ./...
-
-RUN useradd -m appuser
-RUN chown appuser .
-USER appuser
+ENV PORT=8080 \
+    REQUEST_ORIGIN=http://localhost:5001
 
 EXPOSE 8080
 
